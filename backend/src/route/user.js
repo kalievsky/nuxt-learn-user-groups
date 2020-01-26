@@ -1,26 +1,46 @@
+const {UserGroup} = require('../db/model/user-group.js');
 const {User} = require('../db/model/user.js');
 
 module.exports = (app) => {
 
     app.get('/user-list', (req, res) => {
+        console.log(req.query);
         if (!req.query.userGroupId) {
             res.status(400);
             res.json();
             return;
         }
 
-        User.findAll({
-            attributes: ['id', 'name', 'user_group_id'],
-            order: [
-                ['created_at', 'asc'],
-            ],
-        }, {
+        UserGroup.findOne({
             where: {
-                user_group_id: req.query.userGroupId,
+                id: +req.query.userGroupId,
             },
         })
-            .then(userList => {
-                res.json(userList);
+            .then((userGroup) => {
+                if (!userGroup || !userGroup.id) {
+                    res.status(404);
+                    res.json();
+                    return;
+                }
+
+                User.findAll({
+                    attributes: ['id', 'name', 'user_group_id'],
+                    order: [
+                        ['created_at', 'asc'],
+                    ],
+                }, {
+                    where: {
+                        user_group_id: userGroup.id,
+                    },
+                })
+                    .then(userList => {
+                        if (!userList) {
+                            res.status(404);
+                            res.json();
+                            return;
+                        }
+                        res.json(userList);
+                    });
             });
     });
 

@@ -53,7 +53,6 @@ export default {
             apiFunction(payload)
                 .then(() => {
                     this.name = '';
-                    this.user_group_id = null;
                     this.$emit('success');
                 })
                 .catch(err => {

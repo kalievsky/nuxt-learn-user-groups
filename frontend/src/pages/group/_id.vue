@@ -64,7 +64,7 @@ export default {
     }),
 
     asyncData({params, error}) {
-        return getList(+params.id)
+        return getList(params.id)
             .then(({data}) => {
                 return {
                     list: data,
