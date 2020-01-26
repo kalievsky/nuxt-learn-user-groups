@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+
+  db:
+    ports:
+      - 5432:5432
+
+  backend:
+    build:
+      dockerfile: dev.Dockerfile
+    environment:
+      - NODE_ENV=development
+    entrypoint: npm run watch
+
+  frontend:
+    build:
+      dockerfile: dev.Dockerfile
+    environment:
+      - NODE_ENV=development
+    entrypoint: npm run dev
+
+  proxy:
+    build:
+      dockerfile: dev.Dockerfile
+    environment:
+      - NODE_ENV=development
+    entrypoint: npm run watch

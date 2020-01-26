@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+
+  db:
+    build:
+      context: ./db
+    image: user-group__db-image
+    container_name: user-group__db-container
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+
+  backend:
+    build:
+      context: ./backend
+    image: user-group__backend-image
+    container_name: user-group__backend-container
+    volumes:
+      - ./backend/src:/usr/src/app
+      - /usr/src/app/node_modules
+
+  frontend:
+    build:
+      context: ./frontend
+    image: user-group__frontend-image
+    container_name: user-group__frontend-container
+    volumes:
+      - ./frontend/src:/usr/src/app
+      - /usr/src/app/node_modules
+
+  proxy:
+    build:
+      context: ./proxy
+    image: user-group__proxy-image
+    container_name: user-group__proxy-container
+    volumes:
+      - ./proxy/src:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 80:80
+    links:
+      - backend:back
