@@ -6,4 +6,4 @@
 
 * Remove container and image `docker container rm user-group__frontend-container user-group__backend-container user-group__db-container user-group__proxy-container && docker image rm user-group__frontend-image user-group__frontend-container user-group__backend-image user-group__db-image user-group__proxy-image`
                               
-* Enter frontend shell `docker container run -it user-group__frontend-image sh`
+* Enter frontend shell `docker-compose run --rm frontend sh`

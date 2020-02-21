@@ -1,5 +1,6 @@
 <template>
     <div>
+        <a @click="reload">Reload</a>
         <p>
             Create new group
         </p>
@@ -31,6 +32,13 @@
                 </div>
             </li>
         </ul>
+
+        <video
+            src="/static/small.mp4"
+            controls
+            loop
+            ref="video"
+        />
     </div>
 </template>
 
@@ -85,6 +93,20 @@ export default {
         groupEditTurnOff() {
             this.groupIdEdit = null;
         },
+
+        reload() {
+            window.location.reload();
+        },
+    },
+
+    mounted() {
+        this.$refs.video.play();
     },
 };
 </script>
+
+<style lang="scss">
+html body{
+    background: grey;
+}
+</style>

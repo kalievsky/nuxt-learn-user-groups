@@ -5,8 +5,7 @@ services:
   db:
     build:
       context: ./db
-    image: user-group__db-image
-    container_name: user-group__db-container
+      dockerfile: ./Dockerfile
     restart: always
     environment:
       POSTGRES_PASSWORD: example
@@ -14,30 +13,31 @@ services:
   backend:
     build:
       context: ./backend
-    image: user-group__backend-image
-    container_name: user-group__backend-container
+      dockerfile: ./Dockerfile
     volumes:
       - ./backend/src:/usr/src/app
-      - /usr/src/app/node_modules
+      - backend_node_modules:/usr/src/app/node_modules
 
   frontend:
     build:
       context: ./frontend
-    image: user-group__frontend-image
-    container_name: user-group__frontend-container
     volumes:
       - ./frontend/src:/usr/src/app
-      - /usr/src/app/node_modules
+      - frontend_node_modules:/usr/src/app/node_modules
 
   proxy:
-    build:
-      context: ./proxy
-    image: user-group__proxy-image
-    container_name: user-group__proxy-container
-    volumes:
-      - ./proxy/src:/usr/src/app
-      - /usr/src/app/node_modules
+    image: nginx:alpine
+    command: [nginx-debug, '-g', 'daemon off;']
     ports:
       - 80:80
-    links:
-      - backend:back
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./static:/var/www/static
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  backend_node_modules:
+  frontend_node_modules:
+  proxy_node_modules:

@@ -3,8 +3,6 @@ version: "3.7"
 services:
 
   backend:
-    build:
-      dockerfile: prod.Dockerfile
     environment:
       - NODE_ENV=production
     restart: always
@@ -18,11 +16,3 @@ services:
     command: >
       sh -c "npm run build &&
              npm run start"
-
-  proxy:
-    build:
-      dockerfile: prod.Dockerfile
-    environment:
-      - NODE_ENV=production
-    restart: always
-    entrypoint: npm run start
